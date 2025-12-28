@@ -27,7 +27,12 @@ fi
 
 # Start Backend
 echo "📦 Starting Backend (Flask)..."
-source venv/bin/activate
+# Check if venv exists, if not use conda environment
+if [ -d "venv" ]; then
+    source venv/bin/activate
+else
+    echo "⚠️  venv not found. Ensure Python dependencies are installed in your current environment."
+fi
 python3 app.py &
 BACKEND_PID=$!
 
@@ -37,7 +42,7 @@ sleep 2
 # Start Frontend
 echo "🌐 Starting Frontend (Vite)..."
 cd frontend
-pnpm dev --host --port 5173 &
+VITE_ALLOWED_HOST=$ALLOWED_HOST pnpm dev --host --port 5173 &
 FRONTEND_PID=$!
 
 echo ""
